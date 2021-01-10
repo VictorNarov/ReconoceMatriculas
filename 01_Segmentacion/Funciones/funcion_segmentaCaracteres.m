@@ -4,15 +4,22 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
 
     % Nos quedamos con la componente roja de la imagen
     I = I(:,:,1);
-    I = mat2gray(I, [0 255]);
+    %I = mat2gray(I, [0 255]);
     %subplot(1,2,1),imshow(I), subplot(1,2,2), imhist(I);
 
-    % Mirando su histograma, podemos binarizar segun el umbral de otsu para
+    %% UMBRALIZACION GLOBAL - NO CORRIGE DEFECTOS ILUMINACION
+    % Mirando su histograma bimodal, podemos binarizar segun un umbral para
     % quedarnos con la primera agrupacion del histograma, la contribucion de
     % pixeles oscuros
-    Umbral = graythresh(I);
-    Ib = I < Umbral;
+%     Umbral = graythresh(double(I));
+%     Ib = I < Umbral*255;
     %imshow(Ib);
+    
+    %% TRATAMIENTO DE DEFECTOS DE ILUMINCACION -> UMBRALIZACION LOCAL
+     WMedias = 155; WDesv = 75; ConstDesbalanceoClases = 35;
+     Ib = funcion_umbralizacionLocalMedias(I, WMedias,WDesv, ConstDesbalanceoClases);
+   
+   
     
     %% Estrategia de filtrado
     % Objetos que tengan pixeles en la linea horizontal central de la imagen
@@ -82,6 +89,9 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
     Ietiq(Ietiq==1) = 0;
     
     Ietiq(Ietiq>0) = Ietiq(Ietiq>0)-1; % Etiquetas de 1:Numero_Objetos
+    
+    %% TODO: rellenar huecos, filtro de apertura y cierre
+   
     
 end
 

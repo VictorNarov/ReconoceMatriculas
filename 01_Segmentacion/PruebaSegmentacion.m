@@ -35,8 +35,7 @@ for objeto=1:numObjetos
     % en coordenadas X,Y OJO!
     [F, C] = find(Iobj==true);
     %centroide =[mean(C) mean(F)]; % X=col, Y=fila
-
-    
+   
     %% Bounding Box, fila y col max y min
     Fmin = min(F); Fmax = max(F);
     Cmin = min(C); Cmax = max(C);
@@ -67,7 +66,9 @@ for i=1:4
     
     Ietiq = funcion_segmentaCaracteres(Nombre,6);
     
-    imtool(Ietiq)
+    figure, subplot(1,2,1), imshow(imread(Nombre)),title(Nombre)
+    subplot(1,2,2), imshow(Ietiq), title("Segmentacion I " + Nombre), hold off;
+    %imtool(Ietiq)
     
 end
 

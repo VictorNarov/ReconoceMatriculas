@@ -1,0 +1,51 @@
+function [outputArg1,outputArg2] = funcion_umbralizacionLocal(inputArg1,inputArg2)
+
+% Un pixel es de letra si es mas oscuro que un umbral tomado de su vecindad
+
+    [N, M] = size(I,1,2);
+    Ieq_local = I;
+    
+    % La ventana debe tener numero impar de filas y columnas
+    if mod(NumFilVent,2) == 0
+        NumFilVent = NumFilVent+1;
+    end
+    if mod(NumColVent,2) == 0
+        NumColVent = NumColVent+1;
+    end
+    
+    amp_fila = floor(NumFilVent / 2);
+    amp_col = floor(NumColVent / 2);
+    
+    I_amp = uint8(zeros(N+2*amp_fila, M+2*amp_col));
+    
+    if OpcionRelleno == "zeros"
+        I_amp(amp_fila+1:end-amp_fila, amp_col+1:end-amp_col) = I;
+    else
+        I_amp = padarray(Ieq_local, [amp_fila amp_col], OpcionRelleno);
+    end
+    [N, M] = size(I_amp,1,2);
+    
+    % Por cada pixel
+    for i=1 + amp_fila:N - amp_fila
+        for j = 1 + amp_col:M - amp_col
+            
+           % 1.Se genera una subimagen centrada en él.
+            vecindad = I_amp(i-amp_fila : i+amp_fila, j-amp_col : j+amp_col);
+            [n,m] = size(vecindad,1,2);
+            
+            % Sacamos el umbral de otsu
+            Umbral = graythresh()
+            
+           % 2.Se ecualiza su histograma y se genera la subimagen ecualizada.
+            I_sub_eq = funcion_EcualizaImagenV2(vecindad);
+            
+           % 3.Se genera la imagen ecualizada, asignando al píxel en cuestión el nivel de gris que corresponde 
+           % al píxel central de la subimagen ecualizada.
+            Ieq_local(i-amp_fila,j-amp_col) = I_sub_eq(floor(n/2), floor(m/2));
+            
+        end
+    end
+
+
+end
+

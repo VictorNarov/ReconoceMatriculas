@@ -1,0 +1,25 @@
+function Ib = funcion_umbralizacionLocalMedias(I, WMedia, WDesv, ConstDesbalanceoClases)
+
+    % Un pixel es de letra si es mas oscuro que un umbral tomado de su vecindad
+
+    I = double(I);
+    
+    % Matriz de medias de la I, convolucion
+    Hmedia = (1/(WMedia*WMedia))*ones(WMedia);
+    Medias = imfilter(I, Hmedia, 'symmetric');
+    
+    %% 01 - Binarizacion matricial con umbral de medias - constante
+    % Ya que las clases del histograma están desbalanceadas
+    
+    UMedias = Medias - ConstDesbalanceoClases;
+    Ib = I < UMedias;
+    
+    
+    %% 02 - Aplicar esa binarizacion en zonas de alta desv tipica
+    % (para no aplicar la operacion en areas de fondo)
+    
+    Desviaciones = stdfilt(I, ones(WDesv));
+    
+
+end
+
