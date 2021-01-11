@@ -15,21 +15,23 @@ Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
 % hay que cuantificar el grado de similitud de este con cada una de las plantillas facilitadas.
 % Implementa para ello una función que calcule la correlación normalizada entre dos matrices bidimensionales de igual dimensión:
 % El algoritmo decidirá que el carácter del objeto desconocido es aquel al que corresponde la plantilla para la que se alcanza la correlación máxima.
-
+load Plantillas.mat
 %% Por cada imagen de matricula
 nCaracteresPosibles = length(Caracteres);
 nCaracteresTrain = [7 7 6 7];
 nCaracteresTest = [7 6 7 7 7 7 7 6 6 6 7 7 7 7 7 7 7 7 7 6];
 
-for i=1:length(nCaracteresTest)
-   
-    Nombre = "Train_" + num2str(i, "%02d") + ".jpg";
+
+for i=18:18
+    CadenaReconocida = "";
+    Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
+    I = imread(Nombre);
     
     %% Obtenemos su imagen segmentada
-    Ietiq = funcion_segmentaCaracteres(Nombre,nCaracteresTrain(i));
+    Ietiq = funcion_segmentaCaracteres(Nombre,nCaracteresTest(i));
     
     %% Por cada caracter
-    for objeto=1:nCaracteresTrain(i)
+    for objeto=1:nCaracteresTest(i)
         Iobj = Ietiq==objeto;
         
         
@@ -52,21 +54,27 @@ for i=1:length(nCaracteresTest)
                  
                 % Cargamos la plantilla
                 nombreT = "Objeto" + num2str(objetoT, '%02d') + "Angulo" + num2str(anguloT, '%02d');
-                T = load("Plantillas.mat",  nombreT);
+                T = eval(nombreT);
                 
                 % Ajustamos el tamaño de la imagen a la plantilla
                 [MT, NT] = size(T);
-                ROI = imresize(ROI, [MT NT]);
+                ROIrecortada = imresize(ROI, [MT NT]);
                 
-                ValoresCorrelacion(objetoT, anguloT) = funcion_CorrelacionEntreMatrices (ROI, T);
+                % Medimos su valor de correlacion normal cruzada
+                ValoresCorrelacion(objetoT, anguloT) = funcion_CorrelacionMatrices(ROI, T);
             end
         end
         
-        [FmaxCorr, ~] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
+        % Buscamos el objeto de la plantilla de mayor correlacion
+        [FMaxCorr, ~] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
         
+        caracterReconocido = Caracteres(FMaxCorr);
         
+        % Añadimos el caracter reconocido a la cadena
+        CadenaReconocida = CadenaReconocida + caracterReconocido;
     end
     
-    
+    % Visualizamos
+    figure, imshow(I), hold on, funcion_pintaBBCentroide(Ietiq), title(Nombre+ " - "+ CadenaReconocida);
     
 end

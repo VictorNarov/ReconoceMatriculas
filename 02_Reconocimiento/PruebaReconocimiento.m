@@ -22,7 +22,7 @@ nCaracteresTrain = [7 7 6 7];
 nCaracteresTest = [7 6 7 7 7 7 7 6 6 6 7 7 7 7 7 7 7 7 7 6];
 
 
-for i=1:length(nCaracteresTest)
+for i=18:18
     CadenaReconocida = "";
     Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
     I = imread(Nombre);
@@ -58,10 +58,10 @@ for i=1:length(nCaracteresTest)
                 
                 % Ajustamos el tamaño de la imagen a la plantilla
                 [MT, NT] = size(T);
-                ROI = imresize(ROI, [MT NT]);
+                ROIrecortada = imresize(ROI, [MT NT]);
                 
                 % Medimos su valor de correlacion normal cruzada
-                ValoresCorrelacion(objetoT, anguloT) = funcion_CorrelacionMatrices(ROI, T);
+                ValoresCorrelacion(objetoT, anguloT) = funcion_CorrelacionMatrices(ROIrecortada, T);
             end
         end
         
