@@ -1,4 +1,4 @@
-function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
+function [Ietiq areas centroides] = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
 
     I = imread(Nombre);
 
@@ -11,14 +11,15 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
     % Mirando su histograma bimodal, podemos binarizar segun un umbral para
     % quedarnos con la primera agrupacion del histograma, la contribucion de
     % pixeles oscuros
-%     Umbral = graythresh(I);
-%     Ib = I < Umbral;
+%     Umbral = graythresh(double(I));
+%     Ib = I < Umbral*255;
     %imshow(Ib);
     
     %% TRATAMIENTO DE DEFECTOS DE ILUMINCACION -> UMBRALIZACION LOCAL
-    WMedias = 75; WDesv = 33; ConstDesbalanceoClases = 35;
-    Ib = funcion_umbralizacionLocalMedias(I, WMedias,v ConstDesbalanceoClases);
-    imshow(Ib)
+     WMedias = 155; WDesv = 75; ConstDesbalanceoClases = 35;
+     Ib = funcion_umbralizacionLocalMedias(I, WMedias,WDesv, ConstDesbalanceoClases);
+   
+   
     
     %% Estrategia de filtrado
     % Objetos que tengan pixeles en la linea horizontal central de la imagen
@@ -88,7 +89,35 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
     Ietiq(Ietiq==1) = 0;
     
     Ietiq(Ietiq>0) = Ietiq(Ietiq>0)-1; % Etiquetas de 1:Numero_Objetos
-   
+    
+    %% Rellenar huecos en los caracteres
+    % Podemos usar un filtro de mediana
+    % O una combinacion de filtro max y min, cierre morfologico
+    for i=1:Numero_Objetos
+        Iobj = Ietiq == i;
+        
+        %% Filtro de mediana
+        % I_filtrada = medfilt2(Iobj);
+        
+        %% Filtro de apertura y cierre
+        W = 5;
+        % Filtro de maximos, de la secuencia ordenada de la vecindad, se
+        % queda con el ultimo valor, el maximo
+        %I_filtroMax = ordfilt2(Iobj, W*W, ones(W,W));
+        
+        % Como efecto secundario, se hace el borde más grande, aplicamos un
+        % filtro de minimos
+        %I_filtrada= ordfilt2(I_filtroMax, 1, ones(W,W));
+        
+        % En matlab tenemos la funcion imclose, para aplicar el cierre
+        % morfologico
+        I_filtrada = imclose(Iobj, ones(W,W));
+        
+        I_filtrada = imopen(I_filtrada, ones(W,W));
+                  
+        Ietiq(I_filtrada) = i;
+    end
+    
     
 end
 

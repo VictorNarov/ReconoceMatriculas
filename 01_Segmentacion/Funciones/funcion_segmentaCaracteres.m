@@ -90,8 +90,34 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
     
     Ietiq(Ietiq>0) = Ietiq(Ietiq>0)-1; % Etiquetas de 1:Numero_Objetos
     
-    %% TODO: rellenar huecos, filtro de apertura y cierre
-   
+    %% Rellenar huecos en los caracteres
+    % Podemos usar un filtro de mediana
+    % O una combinacion de filtro max y min, cierre morfologico
+    for i=1:Numero_Objetos
+        Iobj = Ietiq == i;
+        
+        %% Filtro de mediana
+        % I_filtrada = medfilt2(Iobj);
+        
+        %% Filtro de apertura y cierre
+        W = 5;
+        % Filtro de maximos, de la secuencia ordenada de la vecindad, se
+        % queda con el ultimo valor, el maximo
+        %I_filtroMax = ordfilt2(Iobj, W*W, ones(W,W));
+        
+        % Como efecto secundario, se hace el borde más grande, aplicamos un
+        % filtro de minimos
+        %I_filtrada= ordfilt2(I_filtroMax, 1, ones(W,W));
+        
+        % En matlab tenemos la funcion imclose, para aplicar el cierre
+        % morfologico
+        I_filtrada = imclose(Iobj, ones(W,W));
+        
+        I_filtrada = imopen(I_filtrada, ones(W,W));
+                  
+        Ietiq(I_filtrada) = i;
+    end
+    
     
 end
 

@@ -61,16 +61,15 @@ end
 % Y descartar el objeto a la izqda (deteccion de cuadro E España matricula)
 
 nCaracteresTrain = [7 7 6 7];
-nCaracteresTest = [7 6 7 7 7 7 7 6 6 6 7 7 7 7 7 7 7 7 7 6];
-
-for i=1:length(nCaracteresTest)
+nCaracteresTest = [7 6 6 7 7 7 7 6 6 6 7 7 7 7 7 7 7 7 7 6];
+for i=1:nCaracteresTest
    
-    Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
+    Nombre = "Training_" + num2str(i, "%02d") + ".jpg";
     
-    Ietiq = funcion_segmentaCaracteres(Nombre,nCaracteresTest(i));
+    Ietiq = funcion_segmentaCaracteres(Nombre,nCaracteresTrain(i));
     
     figure, subplot(1,2,1), imshow(imread(Nombre)),title(Nombre)
-    subplot(1,2,2), imshow(Ietiq), hold on, funcion_pintaBBCentroide(Ietiq), title("Segmentacion I " + Nombre), hold off;
+    subplot(1,2,2), imshow(Ietiq), title("Segmentacion I " + Nombre), hold off;
     %imtool(Ietiq)
     
 end
