@@ -16,10 +16,10 @@ function funcion_pintaBBCentroide(Ietiq)
         centroide = [(Cmax+Cmin)/2 (Fmax+Fmin)/2];
 
         %% Visualizar
-        line([Cmin Cmax],[Fmin Fmin]), hold on,     % bb arriba
-        line([Cmin Cmax],[Fmax Fmax]), hold on,     % bb abajo
-        line([Cmin Cmin],[Fmin Fmax]), hold on,     % bb izqda
-        line([Cmax Cmax],[Fmin Fmax]), hold on,     % bb dcha
+        line([Cmin Cmax],[Fmin Fmin], 'Color', 'r'), hold on,     % bb arriba
+        line([Cmin Cmax],[Fmax Fmax], 'Color', 'r'), hold on,     % bb abajo
+        line([Cmin Cmin],[Fmin Fmax], 'Color', 'r'), hold on,     % bb izqda
+        line([Cmax Cmax],[Fmin Fmax], 'Color', 'r'), hold on,     % bb dcha
         plot(centroide(1), centroide(2), '+r'), hold on;
 
     end
