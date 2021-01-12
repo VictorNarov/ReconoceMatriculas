@@ -52,7 +52,10 @@ function [cadenaReconocida, metricaSeparabilidad] = funcion_ReconoceCaracteres(I
         
         caracterReconocido = Caracteres(FMaxCorr);
         
-        metricaSeparabilidad(objeto) = ValoresCorrelacion(FMaxCorr, CMaxCorr);
+        % Guardamos la diferencia de correlacion del maximo al 2do maximo
+        max2ValoresCorrelacion = maxk(ValoresCorrelacion,2);
+        
+        metricaSeparabilidad(objeto) = max2ValoresCorrelacion(1) - max2ValoresCorrelacion(2);
         
         % Añadimos el caracter reconocido a la cadena
         cadenaReconocida = cadenaReconocida + caracterReconocido;

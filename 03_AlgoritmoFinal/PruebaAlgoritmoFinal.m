@@ -44,8 +44,9 @@ for i=1:length(nCaracteresTest)
 end
 
 %% Representamos la metrica de separabilidad de cada caracter
-bpFigure = figure; hold on
 
+% Digitos 0-9
+bpFigure = figure; hold on
 for i=1:10
     figure(bpFigure),
     subplot(1,10,i), boxplot(metricaCorrelacion{i})
@@ -55,3 +56,24 @@ for i=1:10
     title("Caracter: " +Caracteres(i));
 end
 
+% A-K
+bpFigure = figure; hold on
+for i=11:18
+    figure(bpFigure),
+    subplot(1,8,i-10), boxplot(metricaCorrelacion{i})
+    xlabel('Diagrama de Caja')
+    ylabel('Valor de correlacion')
+    axis([ 0 2 0 1 ])
+    title("Caracter: " +Caracteres(i));
+end
+
+% L-Z
+bpFigure = figure; hold on
+for i=19:26
+    figure(bpFigure),
+    subplot(1,8,i-18), boxplot(metricaCorrelacion{i})
+    xlabel('Diagrama de Caja')
+    ylabel('Valor de correlacion')
+    axis([ 0 2 0 1 ])
+    title("Caracter: " +Caracteres(i));
+end
