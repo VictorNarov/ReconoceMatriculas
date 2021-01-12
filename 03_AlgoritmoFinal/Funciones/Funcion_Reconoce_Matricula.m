@@ -1,10 +1,12 @@
-function cadenaReconocida = Funcion_Reconoce_Matricula(Nombre, Numero_Objetos)
+function [cadenaReconocida,metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, Numero_Objetos)
 
     %% Obtenemos su imagen segmentada
     Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos);
 
     %% Reconocemos la cadena de caracteres de la matricula
-    cadenaReconocida = funcion_ReconoceCaracteres(Ietiq, Numero_Objetos);
+    [cadenaReconocida, metricaSeparabilidad] = funcion_ReconoceCaracteres(Ietiq, Numero_Objetos);
+   
+    % TODO: grafico de barras distancia separabilidad 
     
     %%  Visualizamos
     I = imread(Nombre);

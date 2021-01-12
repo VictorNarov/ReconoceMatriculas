@@ -3,13 +3,16 @@
 % hay que cuantificar el grado de similitud de este con cada una de las plantillas facilitadas.
 % El algoritmo decidirá que el carácter del objeto desconocido es aquel al que corresponde la plantilla 
 % para la que se alcanza la correlación máxima.
-function cadenaReconocida = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
+function [cadenaReconocida, metricaSeparabilidad] = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
 
     Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
     nCaracteresPosibles = length(Caracteres);
     load Plantillas.mat
     
     cadenaReconocida = "";
+    
+    %%
+    metricaSeparabilidad = zeros(nCaracteres,1);
 
     %% Por cada caracter
     for objeto=1:nCaracteres
@@ -40,13 +43,16 @@ function cadenaReconocida = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
                 
                 % Medimos su valor de correlacion normal cruzada
                 ValoresCorrelacion(objetoT, anguloT) = funcion_CorrelacionMatrices(ROIrecortada, T);
+                
             end
         end
         
         % Buscamos el objeto de la plantilla de mayor correlacion
-        [FMaxCorr, ~] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
+        [FMaxCorr, CMaxCorr] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
         
         caracterReconocido = Caracteres(FMaxCorr);
+        
+        metricaSeparabilidad(objeto) = ValoresCorrelacion(FMaxCorr, CMaxCorr);
         
         % Añadimos el caracter reconocido a la cadena
         cadenaReconocida = cadenaReconocida + caracterReconocido;
