@@ -22,7 +22,7 @@ nCaracteresTrain = [7 7 6 7];
 nCaracteresTest = [7 6 7 7 7 7 7 6 6 6 7 7 7 7 7 7 7 7 7 6];
 
 
-for i=18:18
+for i=1:length(nCaracteresTest)
     CadenaReconocida = "";
     Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
     I = imread(Nombre);
@@ -33,8 +33,7 @@ for i=18:18
     %% Por cada caracter
     for objeto=1:nCaracteresTest(i)
         Iobj = Ietiq==objeto;
-        
-        
+               
         %% Recortamos por el Bounding Box, fila y col max y min
         [F, C] = find(Iobj==true);
         Fmin = min(F); Fmax = max(F);
@@ -77,4 +76,8 @@ for i=18:18
     % Visualizamos
     figure, imshow(I), hold on, funcion_pintaBBCentroide(Ietiq), title(Nombre+ " - "+ CadenaReconocida);
     
+    %% Para automatizar el proceso en la etapa, hemos programado la funcion_reconoceCaracteres
+    % Que recibe como entrada una imagen binaria segmentada y etiquetada
+    % de los caracteres y devuelve la cadena reconocida usando el metodo de
+    % template matching de mayor valor de correlación
 end

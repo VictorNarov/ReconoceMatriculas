@@ -1,4 +1,4 @@
-function [Ietiq areas centroides] = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
+function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
 
     I = imread(Nombre);
 
@@ -36,7 +36,7 @@ function [Ietiq areas centroides] = funcion_segmentaCaracteres(Nombre,Numero_Obj
 
     %% Tratammiento de cada caracter
     for iObj=1:nObj
-
+ 
         Iobj = Ietiq==iObj;
 
         % Linea central contiene al menos un pixel del objeto

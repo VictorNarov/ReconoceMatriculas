@@ -36,7 +36,7 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
 
     %% Tratammiento de cada caracter
     for iObj=1:nObj
-
+ 
         Iobj = Ietiq==iObj;
 
         % Linea central contiene al menos un pixel del objeto
