@@ -3,6 +3,9 @@ clear all, clc, close all, addpath(genpath(pwd))
 Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
 
 metricaCorrelacion = cell(length(Caracteres),1);
+
+verbose = false; % Mostrar imagenes
+
 %% Probamos a reconocer todas las matriculas del conjunto de datos Training
 
 nCaracteresTrain = [7 7 6 7];
@@ -11,7 +14,7 @@ for i=1:length(nCaracteresTrain)
     
     Nombre = "Training_" + num2str(i, "%02d") + ".jpg";
     
-    [cadenaReconocida, metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTrain(i));
+    [cadenaReconocida, metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTrain(i),verbose);
     
     disp(Nombre + " -> " + cadenaReconocida);
     
@@ -31,7 +34,7 @@ for i=1:length(nCaracteresTest)
     
     Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
     
-    [cadenaReconocida, metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTest(i));
+    [cadenaReconocida, metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTest(i),verbose);
     
     disp(Nombre + " -> " + cadenaReconocida);
     
@@ -45,35 +48,27 @@ end
 
 %% Representamos la metrica de separabilidad de cada caracter
 
-% Digitos 0-9
-bpFigure = figure; hold on
-for i=1:10
-    figure(bpFigure),
-    subplot(1,10,i), boxplot(metricaCorrelacion{i})
-    xlabel('Diagrama de Caja')
-    ylabel('Valor de correlacion')
-    axis([ 0 2 0 1 ])
-    title("Caracter: " +Caracteres(i));
+% Etiquetamos los datos de cada muestra de separabilidad con su
+% correspondiente caracter
+% Siendo XVCorr el valor de cada muestra de metrica de separabilidad
+% y YVCorr la clase a la que pertenece (caracter reconocido)
+XVCorr = []; YVCorr = [];
+for i=1:length(Caracteres)
+    
+    valores = metricaCorrelacion{i};
+    
+    for j=1:length(valores)
+        XVCorr = [XVCorr ; valores(j)];
+        YVCorr = [YVCorr ; Caracteres(i)];
+    end
+   
 end
 
-% A-K
-bpFigure = figure; hold on
-for i=11:18
-    figure(bpFigure),
-    subplot(1,8,i-10), boxplot(metricaCorrelacion{i})
-    xlabel('Diagrama de Caja')
-    ylabel('Valor de correlacion')
-    axis([ 0 2 0 1 ])
-    title("Caracter: " +Caracteres(i));
-end
+% Representamos en un diagrama de caja
+figure, hold on,
+boxplot(XVCorr, YVCorr)
+xlabel('Caracter reconocido')
+ylabel('Dif. 2 mayores valores de correlacion (más es mejor)')
+axis([ 0 length(Caracteres)+1 0 1 ])
+title("Diagrama de caja - Métrica de separabilidad");
 
-% L-Z
-bpFigure = figure; hold on
-for i=19:26
-    figure(bpFigure),
-    subplot(1,8,i-18), boxplot(metricaCorrelacion{i})
-    xlabel('Diagrama de Caja')
-    ylabel('Valor de correlacion')
-    axis([ 0 2 0 1 ])
-    title("Caracter: " +Caracteres(i));
-end
