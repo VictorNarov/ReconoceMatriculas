@@ -3,20 +3,20 @@
 % hay que cuantificar el grado de similitud de este con cada una de las plantillas facilitadas.
 % El algoritmo decidirá que el carácter del objeto desconocido es aquel al que corresponde la plantilla 
 % para la que se alcanza la correlación máxima.
-function [cadenaReconocida, metricaSeparabilidad, caracteresParecidosMatricula] = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
+function [cadenaReconocida, metricaSeparabilidad, cadenaMasParecida] = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
 
     Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
     nCaracteresPosibles = length(Caracteres);
     load Plantillas.mat
     
     cadenaReconocida = "";
+    cadenaMasParecida = '';
     
     %% Medir la confianza de cada detección
     % Diferencia de correlacion entre los dos caracteres mas probables
     metricaSeparabilidad = zeros(nCaracteres,1); 
     
-    % Identificar cuál es el segundo caracter más probable
-    caracteresParecidosMatricula = cell(nCaracteres,1);
+
     
 
     %% Por cada caracter
@@ -54,18 +54,16 @@ function [cadenaReconocida, metricaSeparabilidad, caracteresParecidosMatricula] 
         
         % Buscamos el objeto de la plantilla de mayor correlacion
         [FMaxCorr, CMaxCorr] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
+        mejorValorCorrelacion = ValoresCorrelacion(FMaxCorr,CMaxCorr);
         
         caracterReconocido = Caracteres(FMaxCorr);
-        
-        
+         
         % Guardamos la diferencia de correlacion del maximo al 2do maximo
-        % OJO: no indicamos ValoresCorrelacion(:) porque queremos
-        % diferenciar el mejor caracter del segundo mejor (filas), no
-        % entre los distintos angulos de un caracter
-        max2ValoresCorrelacion = maxk(ValoresCorrelacion,2);
-        
-        mejorValorCorrelacion = ValoresCorrelacion(FMaxCorr,CMaxCorr);
-        segundoMejorValorCorrelacion = max(max2ValoresCorrelacion(2,:));
+        % Ponemos a cero la fila del mejor caracter para encontrar el
+        % segundo mejor
+        ValoresCorrelacion(FMaxCorr,:) = 0;
+        [F2MaxCorr, C2MaxCorr] = find(ValoresCorrelacion == max(ValoresCorrelacion(:)));
+        segundoMejorValorCorrelacion = ValoresCorrelacion(F2MaxCorr,C2MaxCorr);
         
         % Diferencia entre el mejor caracter,angulo 
         % MENOS segundo mejor caracter,mejor angulo
@@ -73,6 +71,9 @@ function [cadenaReconocida, metricaSeparabilidad, caracteresParecidosMatricula] 
         
         % Añadimos el caracter reconocido a la cadena
         cadenaReconocida = cadenaReconocida + caracterReconocido;
+        
+        % Añadimos el segundo caracter más probable
+        cadenaMasParecida = [cadenaMasParecida  Caracteres(F2MaxCorr)];
     end
 end
 

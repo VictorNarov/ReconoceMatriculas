@@ -35,16 +35,23 @@ for i=1:length(nCaracteresTest)
     
     Nombre = "Test_" + num2str(i, "%02d") + ".jpg";
     
-    [cadenaReconocida, metricaSeparabilidad] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTest(i),verbose);
+    [cadenaReconocida, metricaSeparabilidad, cadenaMasParecida] = Funcion_Reconoce_Matricula(Nombre, nCaracteresTest(i),verbose);
     
     disp(Nombre + " -> " + cadenaReconocida);
     
     
-        %% Añadimos el valor de correlacion de cada caracter a su correspondiente array
+    %% Añadimos el valor de correlacion de cada caracter a su correspondiente array
     for j=1:strlength(cadenaReconocida)
         posCaracter = strfind(Caracteres, cadenaReconocida{1}(j));
         metricaCorrelacion{posCaracter} = [metricaCorrelacion{posCaracter} metricaSeparabilidad(j)];
+    
+    
+    %% Añadimos los caracteres mas parecidos 
+
+       
+        caracteresParecidos{posCaracter} = [caracteresParecidos{posCaracter} cadenaMasParecida(j)];
     end
+    
 end
 
 %% Representamos la metrica de separabilidad de cada caracter
