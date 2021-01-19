@@ -3,6 +3,7 @@ clear all, clc, close all, addpath(genpath(pwd))
 Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
 
 metricaCorrelacion = cell(length(Caracteres),1);
+caracteresParecidos = cell(length(Caracteres),1);
 
 verbose = false; % Mostrar imagenes
 
