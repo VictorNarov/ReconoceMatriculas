@@ -76,8 +76,8 @@ function [cadenaReconocida, metricaSeparabilidad, iCaracteresParecidos] = funcio
             % Diferencia entre el real - predicho
         else
             FilaCaracterReal = strfind(Caracteres,cadenaReal{1}(objeto));
-            ValorCorrelacionReal = find(ValoresCorrelacion == max(ValoresCorrelacion(FilaCaracterReal,:)));
-            metricaSeparabilidad(objeto) = mejorValorCorrelacion - ValorCorrelacionReal; % Diferencia negativa
+            ValorCorrelacionReal = max(ValoresCorrelacion(FilaCaracterReal,:));
+            metricaSeparabilidad(objeto) = ValorCorrelacionReal - mejorValorCorrelacion; % Diferencia negativa
             
             % Añadimos el indice del segundo caracter más probable
             iCaracteresParecidos(objeto) = FMaxCorr;

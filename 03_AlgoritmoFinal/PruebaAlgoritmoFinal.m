@@ -1,14 +1,13 @@
 clear all, clc, close all, addpath(genpath(pwd))
 
 Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
-cadenasTrainingReales = ["9014FCF";"8585GBX";"H0853Z";"H2305AB";"H2305AB"];
+cadenasTrainingReales = ["9014FCF";"8585GBY";"H0853Z";"H2305AB";"H2305AB"];
 cadenasTestReales = ["7824BLX";"H0504S";"1374BXC";"8959DDY";"3189FYY";"4787DCX";"H2305AB";"H0853Z";"H2462Y";"H0612Y";"3189FYY";"4787DCX";"7226BLK";"3680FSH";"1675FLR";"9315FTC";"2904CNN";"8959DDY";"8959DDY";"H0612Y"];
 
 metricaCorrelacion = cell(length(Caracteres),1);
 
 % 26x26 CARACTER REAL X 2do CARACTER PREDICHO
 posCaracteresParecidos = zeros(length(Caracteres));
-
 
 verbose = false; % Mostrar imagenes
 
@@ -121,9 +120,9 @@ end
 % Representamos en un diagrama de caja
 figure, hold on,
 boxplot(XVCorr, YVCorr)
-xlabel('Caracter reconocido')
-ylabel('Dif. 2 mayores valores de correlacion (más es mejor)')
-axis([ 0 length(Caracteres)+1 0 1 ])
+xlabel('Caracter reconocido | Confianza % | 3 caracteres más probables (votos)')
+ylabel('Dif. Valor Correlación Predicho-Real (más es mejor)')
+axis([ 0 length(Caracteres)+1 -1 1 ])
 title("Diagrama de caja - Métrica de separabilidad");
 fix_xticklabels();
 
