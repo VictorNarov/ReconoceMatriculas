@@ -7,18 +7,24 @@ function Ietiq = funcion_segmentaCaracteres(Nombre,Numero_Objetos)
     %I = mat2gray(I, [0 255]);
     %subplot(1,2,1),imshow(I), subplot(1,2,2), imhist(I);
 
+    
     %% UMBRALIZACION GLOBAL - NO CORRIGE DEFECTOS ILUMINACION
     % Mirando su histograma bimodal, podemos binarizar segun un umbral para
     % quedarnos con la primera agrupacion del histograma, la contribucion de
     % pixeles oscuros
-%     Umbral = graythresh(double(I));
-%     Ib = I < Umbral*255;
+    %Umbral = graythresh(I);
+    %Ib = I < Umbral;
     %imshow(Ib);
     
     %% TRATAMIENTO DE DEFECTOS DE ILUMINCACION -> UMBRALIZACION LOCAL
-     WMedias = 155; WDesv = 75; ConstDesbalanceoClases = 35;
-     Ib = funcion_umbralizacionLocalMedias(I, WMedias,WDesv, ConstDesbalanceoClases);
-   
+        
+%       ConstDesbalanceoClases = 35;
+%       WMedias = 155; WDesv = 75; 
+%       Ib = funcion_umbralizacionLocalMedias(I, WMedias,WDesv, ConstDesbalanceoClases);
+%    
+
+    %% TRATAMIENTO DE DEFECTOS DE ILUMINACION -> EXTRACCIÓN DE FONDO + UMB. GLOBAL
+    Ib = funcion_umbralizacionGlobalExtraccionFondo(I,9, 65);
    
     
     %% Estrategia de filtrado

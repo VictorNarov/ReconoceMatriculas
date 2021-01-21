@@ -3,14 +3,14 @@
 % hay que cuantificar el grado de similitud de este con cada una de las plantillas facilitadas.
 % El algoritmo decidirá que el carácter del objeto desconocido es aquel al que corresponde la plantilla 
 % para la que se alcanza la correlación máxima.
-function [cadenaReconocida, metricaSeparabilidad, cadenaMasParecida] = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
+function [cadenaReconocida, metricaSeparabilidad, iCaracteresParecidos] = funcion_ReconoceCaracteres(Ietiq, nCaracteres)
 
     Caracteres = '0123456789ABCDFGHKLNRSTXYZ';
     nCaracteresPosibles = length(Caracteres);
     load Plantillas.mat
     
     cadenaReconocida = "";
-    cadenaMasParecida = '';
+    iCaracteresParecidos= zeros(nCaracteres,1);
     
     %% Medir la confianza de cada detección
     % Diferencia de correlacion entre los dos caracteres mas probables
@@ -72,8 +72,8 @@ function [cadenaReconocida, metricaSeparabilidad, cadenaMasParecida] = funcion_R
         % Añadimos el caracter reconocido a la cadena
         cadenaReconocida = cadenaReconocida + caracterReconocido;
         
-        % Añadimos el segundo caracter más probable
-        cadenaMasParecida = [cadenaMasParecida  Caracteres(F2MaxCorr)];
+        % Añadimos el indice del segundo caracter más probable
+        iCaracteresParecidos(objeto) = F2MaxCorr;
     end
 end
 
